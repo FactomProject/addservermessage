@@ -15,7 +15,13 @@ func GetPrivateKey() (*[64]byte, error) {
 
 	file, err := os.Open("privatekey.txt")
 	if err != nil {
-		return nil, err
+		file, err = os.Create("privatekey.txt")
+		file.WriteString("************** Private Key to sign addserver message ***********\n0000000000000000000000000000000000000000000000000000000000000000\n*********** Insert your own provate key ************************")
+		file.Close()
+		return nil, errors.New("Error: privatekey.txt does not exist, file created but needs a private key to be inserted")
+		if err != nil {
+			return nil, err
+		}
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
