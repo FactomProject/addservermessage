@@ -4,7 +4,7 @@ This program will assist in sending an addserver message to the network. The pri
 
 ### To get commands
 ```
-addserver help
+addservermessage help
 ```
 
 ## To run
@@ -18,10 +18,10 @@ The program has two functions:
 * Will currently send unsigned message
 
 ```
-addserver send fed|audit CHAINID
+addservermessage send fed|audit CHAINID
 ```
 
 ### Show
 ```
-addserver show fed|audit CHAINID
+addservermessage show fed|audit CHAINID
 ```
