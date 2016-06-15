@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"encoding/hex"
 	"errors"
-	//"fmt"
 	"os"
 	"strings"
 )
@@ -18,7 +17,7 @@ func GetPrivateKey() (*[64]byte, error) {
 		file, err = os.Create("privatekey.txt")
 		file.WriteString("************** Private Key to sign addserver message ***********\n0000000000000000000000000000000000000000000000000000000000000000\n*********** Insert your own provate key ************************")
 		file.Close()
-		return nil, errors.New("Error: privatekey.txt does not exist, file created but needs a private key to be inserted")
+		return nil, errors.New("Privatekey.txt does not exist, file created but needs a private key to be inserted")
 		if err != nil {
 			return nil, err
 		}
@@ -37,6 +36,8 @@ func GetPrivateKey() (*[64]byte, error) {
 	}
 	if len(key) != 64 {
 		return nil, errors.New("Private key of invalid length")
+	} else if strings.Compare(key, "0000000000000000000000000000000000000000000000000000000000000000") == 0 {
+		return nil, errors.New("Private key is all 0s. Please replace the key with in 'privatekey.txt'.")
 	} else {
 		h, err := hex.DecodeString(key)
 		if err != nil {

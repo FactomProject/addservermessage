@@ -151,7 +151,7 @@ var sendAudit = func() *cliCmd {
 func message(chainID string, serverType []byte, send bool) {
 	priv, err := GetPrivateKey()
 	if err != nil {
-		fmt.Println("Error: Invalid private key in file")
+		fmt.Println("Error: " + err.Error())
 		return
 	}
 
