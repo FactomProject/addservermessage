@@ -18,7 +18,7 @@ import (
 var proofOfWorkLength int = 1
 
 // No signiture on sent messages
-var sigRequired bool = false
+var sigRequired bool = true
 
 /********************************
  *          Cli Control         *
@@ -193,23 +193,25 @@ func message(chainID string, serverType []byte, send bool) {
 	// Signiture
 	upToSig := buf.Bytes()
 	noSig := hex.EncodeToString(upToSig[:])
-	curlNoSig := toCurl(noSig)
+	//curlNoSig := toCurl(noSig)
 
 	sig := ed.Sign(priv, upToSig)
+	pub := ed.GetPublicKey(priv)
 
 	newBuf := new(bytes.Buffer)
 	newBuf.Write(upToSig)
+	newBuf.Write(pub[:])
 	newBuf.Write(sig[:])
 	message := newBuf.Bytes()
 	withSig := hex.EncodeToString(message[:])
 	curlWithSig := toCurl(withSig)
 
 	if send == false {
-		PrintHeader("Curl command without Signiture")
-		fmt.Println(curlNoSig)
-		PrintHeader("Curl command with Signiture")
+		//PrintHeader("Curl command without Signiture")
+		//fmt.Println(curlNoSig)
+		PrintHeader("Send addserver message") //with Signiture
 		fmt.Println(curlWithSig)
-		fmt.Println()
+		//fmt.Println()
 	} else {
 		var resp *factom.SendRawMessageResponse
 		var err error
