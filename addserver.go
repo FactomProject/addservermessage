@@ -176,7 +176,7 @@ func message(chainID string, serverType []byte, send bool) {
 	buf.Write([]byte{0x15})
 
 	// Timestamp
-	t := interfaces.NewTimeStampNow()
+	t := interfaces.NewTimestampNow()
 	data, err := t.MarshalBinary()
 	if err != nil {
 		fmt.Println("Error: " + err.Error())
