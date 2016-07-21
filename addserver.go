@@ -90,7 +90,7 @@ var newFed = func() *cliCmd {
 			fmt.Println("No chainID given, 'addserver show fed CHAINID'")
 			return
 		}
-		message(args[1:], []byte{0x00}, false)
+		message(args[1:], []byte{0x00}, false, true)
 	}
 	return cmd
 }()
@@ -106,7 +106,7 @@ var newAudit = func() *cliCmd {
 			fmt.Println("No chainID given, 'addserver show audit CHAINID'")
 			return
 		}
-		message(args[1:], []byte{0x01}, false)
+		message(args[1:], []byte{0x01}, false, true)
 	}
 	return cmd
 }()
@@ -122,7 +122,7 @@ var sendFed = func() *cliCmd {
 			fmt.Println("No chainID given, 'addserver send fed CHAINID'")
 			return
 		}
-		message(args[1:], []byte{0x00}, true)
+		message(args[1:], []byte{0x00}, true, true)
 	}
 	return cmd
 }()
@@ -138,7 +138,7 @@ var sendAudit = func() *cliCmd {
 			fmt.Println("No chainID given, 'addserver send audit CHAINID'")
 			return
 		}
-		message(args[1:], []byte{0x01}, true)
+		message(args[1:], []byte{0x01}, true, true)
 	}
 	return cmd
 }()
@@ -151,7 +151,7 @@ type messageRequest struct {
 	Message string `json:"message"`
 }
 
-func message(args []string, serverType []byte, send bool) {
+func message(args []string, serverType []byte, send bool, add bool) {
 	chainID := args[0]
 	var priv *[64]byte
 	var err error
@@ -191,7 +191,11 @@ func message(args []string, serverType []byte, send bool) {
 	buf := new(bytes.Buffer)
 
 	// Message Type
-	buf.Write([]byte{0x15})
+	if add {
+		buf.Write([]byte{0x15}) // 22 Add Server
+	} else {
+		buf.Write([]byte{0x18}) // 24 Remove Server
+	}
 
 	// Timestamp
 	t := primitives.NewTimestampNow()
