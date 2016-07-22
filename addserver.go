@@ -175,8 +175,8 @@ func message(args []string, serverType []byte, send bool, add bool) {
 
 	identityChainIDPrefix := "888888"
 	if strings.Compare(chainID[:proofOfWorkLength*2], identityChainIDPrefix[:proofOfWorkLength*2]) != 0 {
-		fmt.Println("Error: Invalid identity chain id prefix")
-		return
+		//fmt.Println("Error: Invalid identity chain id prefix")
+		//return
 	} else if len(chainID) != 64 {
 		fmt.Println("Error: Invalid identity chain id length")
 		return
