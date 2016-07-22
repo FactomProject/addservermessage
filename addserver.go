@@ -192,7 +192,7 @@ func message(args []string, serverType []byte, send bool, add bool) {
 
 	// Message Type
 	if add {
-		buf.Write([]byte{0x15}) // 22 Add Server
+		buf.Write([]byte{0x16}) // 22 Add Server
 	} else {
 		buf.Write([]byte{0x18}) // 24 Remove Server
 	}
