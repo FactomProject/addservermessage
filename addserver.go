@@ -17,9 +17,9 @@ import (
 )
 
 // Number of 0x88 bytes needed to match
-var proofOfWorkLength int = 1
+var proofOfWorkLength int = 3
 
-// No signiture on sent messages
+// Signiture on sent messages
 var sigRequired bool = true
 
 var Host string
@@ -217,13 +217,19 @@ func message(args []string, serverType []byte, send bool, add bool) {
 	noSig := hex.EncodeToString(upToSig[:])
 	//curlNoSig := toCurl(noSig)
 
-	sig := ed.Sign(priv, upToSig)
 	pub := ed.GetPublicKey(priv)
+	sig = ed.Sign(priv, upToSig)
+
+	is := ed.VerifyCanonical(ed.GetPublicKey(priv), upToSig, sig)
+	if !is {
+		fmt.Println("Message did not verify, try again")
+		return
+	}
 
 	newBuf := new(bytes.Buffer)
 	newBuf.Write(upToSig)
-	newBuf.Write(pub[:])
-	newBuf.Write(sig[:])
+	newBuf.Write((*pub)[:])
+	newBuf.Write((*sig)[:])
 	message := newBuf.Bytes()
 
 	withSig := hex.EncodeToString(message[:])
