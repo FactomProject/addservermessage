@@ -13,12 +13,28 @@ The program has two functions:
 * show
   * Prints out the curl commands necessary to send the message
 
+## Optional Parameters
+* Not giving a private key will use the private key file in the active directory. If there is none it will create a file, this allows you to not give a private key parameter.
+* -host=HOST: By default it looks at localhost:8088, changing this will send the message to a different host.
+
+## Add Messages
 ### Send
 ```
-addservermessage send fed|audit CHAINID
+addservermessage -host=HOST send fed|audit CHAINID PRIVATEKEY
 ```
 
 ### Show
 ```
-addservermessage show fed|audit CHAINID
+addservermessage -host=HOST show fed|audit CHAINID PRIVATEKEY
+```
+
+## Remove Messages
+### Send
+```
+addservermessage -host=HOST sendR fed|audit CHAINID PRIVATEKEY
+```
+
+### Show
+```
+addservermessage -host=HOST showR fed|audit CHAINID PRIVATEKEY
 ```

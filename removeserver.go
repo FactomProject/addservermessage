@@ -10,7 +10,7 @@ import (
 
 var ShowRemoveServer = func() *cliCmd {
 	cmd := new(cliCmd)
-	cmd.helpMsg = "addserver show rfed|raudit CHAINID"
+	cmd.helpMsg = "addserver showR fed|raudit CHAINID"
 	cmd.description = "Shows a new removeserver message curl command from the chainID."
 	cmd.execFunc = func(args []string) {
 		os.Args = args
@@ -30,7 +30,7 @@ var ShowRemoveServer = func() *cliCmd {
 		})
 		c.Execute(args)
 	}
-	Help.Add("Shows a new server message curl command from the chainID", cmd)
+	Help.Add("Shows a new server remove message curl command from the chainID", cmd)
 	return cmd
 }()
 
@@ -56,7 +56,7 @@ var SendRemoveServer = func() *cliCmd {
 		})
 		c.Execute(args)
 	}
-	Help.Add("Sends a new server message from the chainID", cmd)
+	Help.Add("Sends a new server remove message from the chainID", cmd)
 	return cmd
 }()
 
