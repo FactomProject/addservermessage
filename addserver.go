@@ -218,7 +218,7 @@ func message(args []string, serverType []byte, send bool, add bool) {
 	//curlNoSig := toCurl(noSig)
 
 	pub := ed.GetPublicKey(priv)
-	sig = ed.Sign(priv, upToSig)
+	sig := ed.Sign(priv, upToSig)
 
 	is := ed.VerifyCanonical(ed.GetPublicKey(priv), upToSig, sig)
 	if !is {
