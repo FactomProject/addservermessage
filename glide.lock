@@ -1,0 +1,39 @@
+hash: 7628a076e38cf1fdb15b3e2ee388d03c5de572cd37d7e14478288a3a8b7aa468
+updated: 2017-04-18T23:43:12.346468667-05:00
+imports:
+- name: github.com/btcsuitereleases/btcutil
+  version: f2b1058a82554c0c7c3b8809c5956c38374604d8
+  subpackages:
+  - base58
+- name: github.com/FactomProject/basen
+  version: fe3947df716ebfda9847eb1b9a48f9592e06478c
+- name: github.com/FactomProject/btcutil
+  version: 43986820ccd50b2b02b83e575cb3a39c87457482
+  subpackages:
+  - base58
+  - certs
+- name: github.com/FactomProject/btcutilecc
+  version: d3a63a5752ecf3fbc06bd97365da752111c263df
+- name: github.com/FactomProject/cli
+  version: 45b367ff72df176679318c157a56e436cd5e00dc
+- name: github.com/FactomProject/ed25519
+  version: 38002c4fe7b609c2fa3144a3cc29b997b756bb4c
+  subpackages:
+  - edwards25519
+- name: github.com/FactomProject/factomd
+  version: 987d865b3ac4a2a672fbbf11fdc04fb4a7b170fe
+  subpackages:
+  - common/constants
+  - common/interfaces
+  - common/primitives
+  - common/primitives/random
+- name: github.com/FactomProject/go-bip32
+  version: 3b593af1c415abc1017648e4eb24a88c32fee0f3
+- name: github.com/FactomProject/go-bip39
+  version: d1007fb78d9a7ec65314dad412973e63caf4c527
+- name: golang.org/x/crypto
+  version: 12c985af8526c1f6f0c463bbfd9d69623d13b323
+  subpackages:
+  - pbkdf2
+  - ripemd160
+testImports: []
