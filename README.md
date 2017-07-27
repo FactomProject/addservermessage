@@ -25,7 +25,10 @@ sendR actually sends a removal message
 show just prints the curl commands that would do the promotion so that you can take it elsewhere and send it
 
 f = promote to federated server  
-a = promote to audit server  
+a = promote to audit server 
+
+NOTE: a federated server can be 'promoted' to an audit server
+
 
 The file:
 
@@ -54,5 +57,9 @@ To tell default to add i10 as a federated server:
 
 To tell default to remove itself as an audit server:   
 ```addservermessage -host=10.41.0.5:8088 sendR a 38bab1455b7bd7e5efd15c53c777c79d0c988e9210f1da49a99d95b3a6417be9 4c38c65dc5cdad68f13b74789d3ffb1f3d63e335610868c9b90766553448d26d```
+
+NOTE: when servers are reconfigured via addservermessage, the server count is actually changed to the new value. 
+This means that if a federated server is 'promoted' to an audit server, no audit server will automatically be promoted to federated server to take its place.
+It also means that a network adjusted via addservermessage to have less federated servers than its original quorum will not stall.
 
 
