@@ -21,7 +21,7 @@ addservermessage -host=HOST:8088 send|sendR|show f|a CHAINID PRIVATEKEY
 HOST = I.P. address of node to which the promotion message is to be sent (can be any node)
 
 send actually sends a promotion message  
-sendR actually sends a demotion message  
+sendR actually sends a removal message  
 show just prints the curl commands that would do the promotion so that you can take it elsewhere and send it
 
 f = promote to federated server  
