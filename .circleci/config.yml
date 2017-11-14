@@ -44,7 +44,7 @@ jobs:
     working_directory: /go/src/github.com/FactomProject/addservermessage
 
     docker:
-      - image: factominc/xenial_ansible
+      - image: factominc/elixir_python
 
     steps:
       - checkout
@@ -57,7 +57,6 @@ jobs:
       - restore_cache:
           keys:
             - v6-addservermessage-cache-{{ checksum "glide.lock" }}
-
 
       # Load the images if the cache hit
       - run:
@@ -76,69 +75,58 @@ jobs:
       - run:
           name: Push  master / develop to DockerHub
           command: |
+
+           # Login to DockerHub
             docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+            # If there is a tag, use it
+            if [ "$CIRCLE_TAG" != "" ]; then
+              docker tag addservermessage factominc/addservermessage:${CIRCLE_TAG}
+              docker push factominc/addservermessage:${CIRCLE_TAG}
+            fi
 
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
 
-              # If there is a tag, use it
-              if [ "$CIRCLE_TAG" != "" ]; then
-                docker tag addservermessage factominc/addservermessage:${TAG}
-                docker push factominc/addservermessage:${TAG}
-              fi
-
-              # But tag it as latest anyhow
+              # Tag master as latest
               docker tag addservermessage factominc/addservermessage:latest
               docker push factominc/addservermessage:latest
+            fi
 
-            elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
 
-              # If there is a tag, use it
-              if [ "$CIRCLE_TAG" != "" ]; then
-                docker tag addservermessage factominc/addservermessage:${TAG}-develop
-                docker push factominc/addservermessage:${TAG}-develop
-              fi
-
-              # But tag it as develop anyhow
+              # Tag develop as develop anyhow
               docker tag addservermessage factominc/addservermessage:develop
               docker push factominc/addservermessage:develop
             fi
 
             docker logout
-            
+
       - run:
-          name: Push  master / develop to AWS/ECR
+          name: Push images to AWS ECR
           command: |
             # Login to AWS ECR
             login="$(aws ecr get-login  --no-include-email --region $AWS_REGION)"
             ${login}
 
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-
-              # If there is a tag, use it
-              if [ "$CIRCLE_TAG" != "" ]; then
-                docker tag addservermessage ${AWS_REPO_BASE_URI}/addservermessage:${TAG}
-                docker push ${AWS_REPO_BASE_URI}/addservermessage:${TAG}
-              fi
-
-              # But tag it as latest anyhow
-              docker tag addservermessage ${AWS_REPO_BASE_URI}/addservermessage:latest
-              docker push ${AWS_REPO_BASE_URI}/addservermessage:latest
-
-            elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
-
-              # If there is a tag, use it
-              if [ "$CIRCLE_TAG" != "" ]; then
-                docker tag addservermessage ${AWS_REPO_BASE_URI}/addservermessage:${TAG}-develop
-                docker push ${AWS_REPO_BASE_URI}/addservermessage:${TAG}-develop
-              fi
-
-              # But tag it as develop anyhow
-              docker tag addservermessage ${AWS_REPO_BASE_URI}/addservermessage:develop
-              docker push ${AWS_REPO_BASE_URI}/addservermessage:develop
-
+            # If there is a tag, use it
+            if [ "$CIRCLE_TAG" != "" ]; then
+              docker tag addservermessage ${AWS_REPO_BASE_URI}/addservermessage:${CIRCLE_TAG}
+              docker push ${AWS_REPO_BASE_URI}/addservermessage:${CIRCLE_TAG}
             fi
 
-            docker logout
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+
+              # Tag master as latest
+              docker tag addservermessage ${AWS_REPO_BASE_URI}/addservermessage:latest
+              docker push ${AWS_REPO_BASE_URI}/addservermessage:latest
+            fi
+
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+
+              # Tag develop as develop anyhow
+              docker tag addservermessage ${AWS_REPO_BASE_URI}/addservermessage:develop
+              docker push ${AWS_REPO_BASE_URI}/addservermessage:develop
+            fi
 
       - run:
           name: Save the image cache
