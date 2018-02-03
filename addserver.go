@@ -13,6 +13,7 @@ import (
 
 	"github.com/FactomProject/cli"
 	ed "github.com/FactomProject/ed25519"
+	"github.com/FactomProject/factomd/common/constants"
 	"github.com/FactomProject/factomd/common/primitives"
 )
 
@@ -192,9 +193,9 @@ func message(args []string, serverType []byte, send bool, add bool) {
 
 	// Message Type
 	if add {
-		buf.Write([]byte{0x16}) // 22 Add Server
+		buf.Write([]byte{constants.ADDSERVER_MSG})
 	} else {
-		buf.Write([]byte{0x18}) // 24 Remove Server
+		buf.Write([]byte{constants.REMOVESERVER_MSG})
 	}
 
 	// Timestamp
