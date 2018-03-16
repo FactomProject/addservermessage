@@ -1,5 +1,5 @@
-hash: e8e0f737eddca6000187bb3ecffd0cabc4ec8975db507008faafd2f82970e26c
-updated: 2016-11-20T11:20:35.157785483-05:00
+hash: 888ad9da566f2124fa42ab2e09c35f3efdba8eecef254c6c34e27de466c3ec79
+updated: 2018-03-15T17:53:26.838143707-05:00
 imports:
 - name: github.com/btcsuitereleases/btcutil
   version: f2b1058a82554c0c7c3b8809c5956c38374604d8
@@ -11,6 +11,7 @@ imports:
   version: 43986820ccd50b2b02b83e575cb3a39c87457482
   subpackages:
   - base58
+  - certs
 - name: github.com/FactomProject/btcutilecc
   version: d3a63a5752ecf3fbc06bd97365da752111c263df
 - name: github.com/FactomProject/cli
@@ -20,18 +21,34 @@ imports:
   subpackages:
   - edwards25519
 - name: github.com/FactomProject/factomd
-  version: f15ba160f050c1ec86941f8f24efc0c8eebdffc1
+  version: 4f4a25cc664adbe9ca5be04c03bec0c3e37349fa
   subpackages:
   - common/constants
   - common/interfaces
   - common/primitives
+  - common/primitives/random
 - name: github.com/FactomProject/go-bip32
-  version: 58394f75c1d04ee30972d810015f491b9c7bee02
+  version: 3b593af1c415abc1017648e4eb24a88c32fee0f3
 - name: github.com/FactomProject/go-bip39
-  version: f0f3797c79f21408db076e5ca64f06848c040e04
+  version: d1007fb78d9a7ec65314dad412973e63caf4c527
+- name: github.com/FactomProject/goleveldb
+  version: e7800c6976c5d75f0a9c5e9e0e2ff8086940e58f
+  subpackages:
+  - leveldb
+  - leveldb/errors
+  - leveldb/opt
+  - leveldb/storage
+  - leveldb/util
+- name: github.com/sirupsen/logrus
+  version: 89742aefa4b206dcf400792f3bd35b542998eb3b
 - name: golang.org/x/crypto
   version: 5f31782cfb2b6373211f8f9fbf31283fa234b570
   subpackages:
   - pbkdf2
   - ripemd160
+  - ssh/terminal
+- name: golang.org/x/sys
+  version: 8dbc5d05d6edcc104950cc299a1ce6641235bc86
+  subpackages:
+  - unix
 testImports: []

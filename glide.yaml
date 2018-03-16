@@ -3,6 +3,6 @@ import:
 - package: github.com/FactomProject/cli
 - package: github.com/FactomProject/ed25519
 - package: github.com/FactomProject/factomd
-  version: develop
+  version: communitynet-m3
   subpackages:
   - common/primitives
