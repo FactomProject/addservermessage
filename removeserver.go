@@ -71,7 +71,7 @@ var newRemoveFed = func() *cliCmd {
 			fmt.Println("No chainID given, 'removeserver showR fed CHAINID'")
 			return
 		}
-		message(args[1:], []byte{0x00}, true, false)
+		message(args[1:], []byte{0x00}, false, false)
 	}
 	return cmd
 }()
@@ -87,7 +87,7 @@ var newRemoveAudit = func() *cliCmd {
 			fmt.Println("No chainID given, 'removeserver showR audit CHAINID'")
 			return
 		}
-		message(args[1:], []byte{0x01}, true, false)
+		message(args[1:], []byte{0x01}, false, false)
 	}
 	return cmd
 }()

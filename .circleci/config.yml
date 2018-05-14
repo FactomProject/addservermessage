@@ -1,0 +1,178 @@
+version: 2
+
+jobs:
+
+  build:
+    working_directory: /go/src/github.com/FactomProject/addservermessage
+    docker:
+      - image: circleci/golang:1.9
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v2-addservermessage-go-build-cache-{{ checksum "glide.lock" }}
+
+
+      - run:
+          name: Get glide
+          command: |
+            go get github.com/Masterminds/glide
+      - run:
+          name: Get goveralls
+          command: |
+            go get github.com/mattn/goveralls
+
+      - run:
+          name: Get the dependencies
+          command: |
+            glide install
+      - run:
+          name: Build and install the executable
+          command: go install -v
+
+      - save_cache:
+          key: v2-addservermessage-go-build-cache-{{ checksum "glide.lock" }}
+
+          paths:
+            - vendor
+
+
+  # Docker builds
+  docker_build:
+    working_directory: /go/src/github.com/FactomProject/addservermessage
+
+    docker:
+      - image: factominc/elixir_python
+
+    steps:
+      - checkout
+
+      - setup_remote_docker:
+          version: 17.06.0-ce
+
+      # The main (only) thing we care about is caching the /vendor dir.
+      #   Hence, checksumming glide.lock
+      - restore_cache:
+          keys:
+            - v6-addservermessage-cache-{{ checksum "glide.lock" }}
+
+      # Load the images if the cache hit
+      - run:
+          name: Load Docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /images/addservermessage.tar | true
+
+      # Build the containers
+      - run:
+          name: Build the baseline images
+          command: |
+            docker build -t addservermessage -f Dockerfile .
+
+      # Push, depending on branch/tag
+      - run:
+          name: Push  master / develop to DockerHub
+          command: |
+
+           # Login to DockerHub
+            docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+            # If there is a tag, use it
+            if [ "$CIRCLE_TAG" != "" ]; then
+              docker tag addservermessage factominc/addservermessage:${CIRCLE_TAG}
+              docker push factominc/addservermessage:${CIRCLE_TAG}
+            fi
+
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+
+              # Tag master as latest
+              docker tag addservermessage factominc/addservermessage:latest
+              docker push factominc/addservermessage:latest
+            fi
+
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+
+              # Tag develop as develop anyhow
+              docker tag addservermessage factominc/addservermessage:develop
+              docker push factominc/addservermessage:develop
+            fi
+
+            docker logout
+
+      - run:
+          name: Push images to AWS ECR
+          command: |
+            # Login to AWS ECR
+            login="$(aws ecr get-login  --no-include-email --region $AWS_REGION)"
+            ${login}
+
+            # If there is a tag, use it
+            if [ "$CIRCLE_TAG" != "" ]; then
+              docker tag addservermessage ${AWS_REPO_BASE_URI}/addservermessage:${CIRCLE_TAG}
+              docker push ${AWS_REPO_BASE_URI}/addservermessage:${CIRCLE_TAG}
+            fi
+
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+
+              # Tag master as latest
+              docker tag addservermessage ${AWS_REPO_BASE_URI}/addservermessage:latest
+              docker push ${AWS_REPO_BASE_URI}/addservermessage:latest
+            fi
+
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+
+              # Tag develop as develop anyhow
+              docker tag addservermessage ${AWS_REPO_BASE_URI}/addservermessage:develop
+              docker push ${AWS_REPO_BASE_URI}/addservermessage:develop
+            fi
+
+      - run:
+          name: Save the image cache
+          command: |
+            mkdir -p /images
+            docker save -o /images/addservermessage.tar addservermessage $(docker history -q addservermessage |grep -v missing | grep -v none)
+
+      - save_cache:
+          key: v6-addservermessage-cache-{{ checksum "glide.lock" }}
+
+          paths:
+            - /images
+
+# The flow is
+#    build
+#      |
+#      ---------- docker_build
+#
+#
+
+workflows:
+  version: 2
+  commit-workflow:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - docker_build:
+          filters:
+            tags:
+              only: /.*/
+          context: org-global
+          requires:
+            - build
+
+  scheduled-workflow:
+    triggers:
+      - schedule:
+          cron: "20 5 * * *"
+          filters:
+            branches:
+              only: develop
+    jobs:
+      - build
+      - docker_build:
+          context: org-global
+          requires:
+            - build
