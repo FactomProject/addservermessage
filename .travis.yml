@@ -1,0 +1,12 @@
+language: go
+go:
+        - 1.7.1
+install:
+        - go get -v github.com/Masterminds/glide
+        - cd $GOPATH/src/github.com/Masterminds/glide && git checkout tags/v0.12.3 && go install && cd -
+        - glide install
+script:
+        - go build -v
+notifications:
+        slack:
+                secure: APnN5Tyt+lCfTOqXxYTmzu1us8jc2UTyFhESIts1GJve1lxWx6ridS+FOF99RRbt2Wrz4xhWAbsTZ17GVzFqmJFgsZk29PYKXNyhrQ2AfmvSjsEPu01+5hp8a92ZkOvu8A2bBfa6pv/ss7XtKcLgLwkqBU5o1AIkJD5pDwnaZlnoO+m+WNqJoGN8uraQOQE0PMXHzEjqcTQR1RG0C87RwoaA+ox6ex+648zHKac0nTsaZRDGlkdG6Zh/G6BzxkqdONCa6KMk+6+1WTJEkXDieUwoYGqoYN3F8EcenHKD1jd+tHEonnV0QSuBpRFpVDVPwUnfc49qRGcgc3TZE1TSq3xlrSMsOT87ocsIZtH311PnCW+yQZP5FJ+MaSIekAG9BajROdx+KUqVmwHpstV0/I7AGT6+PiEB0lU38XA4u0cLlhfrCUTESgdcdxzhnLQJ2RIUjaG0uQGKtCklcS0CqRdA/W+4QDZcD1C0Euj9bS9PbsGqqIDIxyTP82j9pKooN+4KASb8qjOMIvzdWZYkzvpfSKp01+fWiWxHNshmzj68LMOtaaz1zS9sfw3rVvP+g/lhMA2sD/zVYnTzC+dACDyztOximTEJnfQ54XEidKLJrnmTBtM/t9Ya1G5WOAcGmOBxzjdqY7TMJ4bTZJ0TPlb4Db3cWlRhHKoYeCHP9nY=

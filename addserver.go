@@ -13,8 +13,8 @@ import (
 
 	"github.com/FactomProject/cli"
 	ed "github.com/FactomProject/ed25519"
-	"github.com/FactomProject/factomd/common/primitives"
 	"github.com/FactomProject/factomd/common/constants"
+	"github.com/FactomProject/factomd/common/primitives"
 )
 
 // Number of 0x88 bytes needed to match

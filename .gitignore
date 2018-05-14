@@ -53,3 +53,5 @@ _testmain.go
 
 # Vendoring
 vendor/
+
+privatekey.txt

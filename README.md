@@ -1,5 +1,7 @@
 Add Server Message Generator
 ======
+[![CircleCI](https://circleci.com/gh/FactomProject/addservermessage.svg?style=svg)](https://circleci.com/gh/FactomProject/addservermessage)
+
 This program will assist in sending an addserver message to the network. The private key to sign the messages is currently hardcoded in the privatekey.txt file. If no file is present, one will be created with a zerohash as the private key, you must replace this value with the correct key.
 ## Before running
 The privatekey.txt must be filled in with the correct privatekey. The correct key might be found in factomd.conf under "LocalServerPrivKey". Replace the 0's with the correct key
