@@ -14,6 +14,7 @@ import (
 	"github.com/FactomProject/cli"
 	ed "github.com/FactomProject/ed25519"
 	"github.com/FactomProject/factomd/common/primitives"
+	"github.com/FactomProject/factomd/common/constants"
 )
 
 // Number of 0x88 bytes needed to match
@@ -192,9 +193,9 @@ func message(args []string, serverType []byte, send bool, add bool) {
 
 	// Message Type
 	if add {
-		buf.Write([]byte{0x16}) // 22 Add Server
+		buf.Write([]byte{constants.ADDSERVER_MSG})
 	} else {
-		buf.Write([]byte{0x18}) // 24 Remove Server
+		buf.Write([]byte{constants.REMOVESERVER_MSG})
 	}
 
 	// Timestamp
@@ -240,7 +241,18 @@ func message(args []string, serverType []byte, send bool, add bool) {
 	if send == false {
 		//PrintHeader("Curl command without Signiture")
 		//fmt.Println(curlNoSig)
-		PrintHeader("Send addserver message") //with Signiture
+		msg := "add"
+		if !add {
+			msg = "remove"
+		}
+
+		if serverType[0] == 0 {
+			msg += " federated"
+		} else {
+			msg += " audit"
+		}
+
+		PrintHeader(fmt.Sprintf("Send %s server message", msg)) //with Signiture
 		fmt.Println(curlWithSig)
 		//fmt.Println()
 	} else {
